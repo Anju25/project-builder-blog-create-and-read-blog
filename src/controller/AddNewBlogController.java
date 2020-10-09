@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.BlogDaoImpl;
+//import dao.BlogDaoImpl;
+import dao.BlogDaolmpl;
 import model.Blog;
-
+//import java.sql.Date;
 
 @WebServlet(urlPatterns = {"/new"})
 public class AddNewBlogController extends HttpServlet {
@@ -27,16 +29,24 @@ public class AddNewBlogController extends HttpServlet {
 		System.out.println("Entering do post");
 		String blogTitle = request.getParameter("title");
 		String blogDescription = request.getParameter("message");
+		//Date now=null;
+		//java.sql.Date sqlDate=new java.sql.Date(now.getTime());
 		LocalDate postedOn = LocalDate.now();
 		System.out.println(blogTitle);
-		Blog blog = new Blog();
-	//	blog.setBlogId(++i);
+		
+		Blog blog = new Blog(++i,blogTitle,blogDescription,postedOn);
+	     blog.setBlogId(++i);
 		blog.setBlogTitle(blogTitle);
 		blog.setBlogDescription(blogDescription);
-		blog.setPostedOn(postedOn);
+		blog.setPostedon(postedOn);
 		
-		BlogDaoImpl blogDao = new BlogDaoImpl();
-		blogDao.insertBlog(blog);
+		BlogDaolmpl blogDao = new BlogDaolmpl();
+		try {
+			blogDao.insertBlog(blog);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		response.sendRedirect("allblogs");
 		/*
 		 * RequestDispatcher rd=this.getServletContext().getRequestDispatcher(
